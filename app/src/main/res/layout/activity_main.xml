@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.rahul.rahulbooklistingudacity.MainActivity">
+
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/seach_button"
+        android:hint="Topic for which book you want "
+        android:inputType="text"
+        android:paddingLeft="16dp" />
+
+    <Button
+        android:id="@+id/seach_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:paddingRight="16dp"
+        android:text="Find" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search"
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/no_book_found"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/search"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="Sorry, Couldn't find anything relevant :-("
+        android:textColor="@color/colorAccent"
+        android:textSize="18sp"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/no_book_found"
+        android:paddingTop="8dp" />
+
+</RelativeLayout>
