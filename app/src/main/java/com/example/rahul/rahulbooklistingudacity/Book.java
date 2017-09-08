@@ -10,21 +10,16 @@ public class Book {
     private String mAuthors;
     private String mTitle;
 
-
     public Book(String authors_name, String bookName) {
         mAuthors = authors_name;
         mTitle = bookName;
-
-
     }
 
-    public String getAuthors()
-    {
+    public String getAuthors() {
         return mAuthors;
     }
 
-    public String getTitles()
-    {
+    public String getTitles() {
         return mTitle;
     }
 }

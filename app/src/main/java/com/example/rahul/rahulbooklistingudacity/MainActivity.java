@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-       findButton = (Button) findViewById(R.id.seach_button);
+        findButton = (Button) findViewById(R.id.seach_button);
 
 
         findButton.setOnClickListener(new View.OnClickListener() {
@@ -95,33 +95,33 @@ public class MainActivity extends AppCompatActivity {
 
     private class BookAsyncTask extends AsyncTask<Void, Void, List<Book>> {
 
-            @Override
-            protected void onPreExecute() {
-                notFound.setVisibility(View.INVISIBLE);
-                // display the progress bar
-                loader.setVisibility(View.VISIBLE);
+        @Override
+        protected void onPreExecute() {
+            notFound.setVisibility(View.INVISIBLE);
+            // display the progress bar
+            loader.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected List<Book> doInBackground(Void... voids) {
+            List<Book> result = Utils.fetchData(getText());
+            return result;
+
+        }
+
+        @Override
+        protected void onPostExecute(List<Book> books) {
+            loader.setVisibility(View.INVISIBLE);
+            //hide the progress bar
+
+            if (books == null) {
+                notFound.setVisibility(View.VISIBLE);
+                notFound.setText("Didnt find any book");
+            } else {
+                notFound.setVisibility(View.GONE);
+                adapter.addAll(books);
             }
-
-            @Override
-            protected List<Book> doInBackground(Void... voids) {
-                List<Book> result = Utils.fetchData(getText());
-                return result;
-
-            }
-
-            @Override
-            protected void onPostExecute(List<Book> books) {
-                loader.setVisibility(View.INVISIBLE);
-                //hide the progress bar
-
-                if (books == null) {
-                    notFound.setVisibility(View.VISIBLE);
-                    notFound.setText("Didnt find any book");
-                } else {
-                    notFound.setVisibility(View.GONE);
-                    adapter.addAll(books);
-                }
-            }
+        }
     }
 }
 

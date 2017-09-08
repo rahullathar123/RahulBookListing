@@ -21,7 +21,6 @@ import java.util.List;
 
 final class Utils {
 
-
     public static String LOG_TAG = Utils.class.getSimpleName();
     static String apiURL = "https://www.googleapis.com/books/v1/volumes?q=search+";
 
