@@ -1,10 +1,13 @@
 package com.example.rahul.rahulbooklistingudacity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -14,6 +17,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -21,6 +25,7 @@ import butterknife.ButterKnife;
 
 
 public class MainActivity extends AppCompatActivity {
+       static final String BOOK_LIST_VALUES = "bookListValues";
 
     Button findButton;
 
@@ -31,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.no_book_found)
     TextView notFound;
     BookAdapter adapter;
+    static final String SEARCH_RESULTS = "booksSearchResults";
+    ListView bookList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         findButton = (Button) findViewById(R.id.seach_button);
+
 
 
         findButton.setOnClickListener(new View.OnClickListener() {
@@ -69,10 +77,46 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ListView bookList = (ListView) findViewById(R.id.list);
+       bookList = (ListView) findViewById(R.id.list);
+
+
+    }
+
+    // YourActivity.java
+    private static final String LIST_STATE = "listState";
+    private Parcelable mListState = null;
+
+    // Write list state to bundle
+    @Override
+    protected void onSaveInstanceState(Bundle state) {
+        super.onSaveInstanceState(state);
+        mListState = bookList.onSaveInstanceState();
+        state.putParcelable(LIST_STATE, mListState);
+    }
+
+    // Restore list state from bundle
+    @Override
+    protected void onRestoreInstanceState(Bundle state) {
+        super.onRestoreInstanceState(state);
+        mListState = state.getParcelable(LIST_STATE);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadData(); // make sure data has been reloaded into adapter first
+        // ONLY call this part once the data items have been loaded back into the adapter
+        // for example, inside a success callback from the network
+        if (mListState != null) {
+            bookList.onRestoreInstanceState(mListState);
+            mListState = null;
+        }
+    }
+
+    private void loadData() {
         adapter = new BookAdapter(this);
         bookList.setAdapter(adapter);
-
 
     }
 
@@ -122,6 +166,8 @@ public class MainActivity extends AppCompatActivity {
                 adapter.addAll(books);
             }
         }
+
     }
+
 }
 

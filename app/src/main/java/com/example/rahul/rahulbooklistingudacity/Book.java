@@ -1,5 +1,8 @@
 package com.example.rahul.rahulbooklistingudacity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by rahul on 2017-08-26.
  */
@@ -22,4 +25,5 @@ public class Book {
     public String getTitles() {
         return mTitle;
     }
+
 }
