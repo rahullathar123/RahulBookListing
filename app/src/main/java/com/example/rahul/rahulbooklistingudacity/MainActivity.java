@@ -17,6 +17,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     BookAdapter adapter;
     static final String SEARCH_RESULTS = "booksSearchResults";
     ListView bookList;
+    List<Book> books;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         findButton = (Button) findViewById(R.id.seach_button);
+        bookList = (ListView) findViewById(R.id.list);
+        books = new ArrayList<>();
+        adapter = new BookAdapter(this);
+        adapter = new BookAdapter(this);
+        bookList.setAdapter(adapter);
+
 
 
 
@@ -76,48 +84,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-       bookList = (ListView) findViewById(R.id.list);
-
-
-    }
-
-    // YourActivity.java
-    private static final String LIST_STATE = "listState";
-    private Parcelable mListState = null;
-
-    // Write list state to bundle
-    @Override
-    protected void onSaveInstanceState(Bundle state) {
-        super.onSaveInstanceState(state);
-        mListState = bookList.onSaveInstanceState();
-        state.putParcelable(LIST_STATE, mListState);
-    }
-
-    // Restore list state from bundle
-    @Override
-    protected void onRestoreInstanceState(Bundle state) {
-        super.onRestoreInstanceState(state);
-        mListState = state.getParcelable(LIST_STATE);
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        loadData(); // make sure data has been reloaded into adapter first
-        // ONLY call this part once the data items have been loaded back into the adapter
-        // for example, inside a success callback from the network
-        if (mListState != null) {
-            bookList.onRestoreInstanceState(mListState);
-            mListState = null;
+        if(savedInstanceState != null) {
+            // restore saved values
+            books = (List<Book>) savedInstanceState.getSerializable("myKey");
+            adapter.clear();
+            adapter.addAll(books);
+            adapter.notifyDataSetChanged();
         }
     }
 
-    private void loadData() {
-        adapter = new BookAdapter(this);
-        bookList.setAdapter(adapter);
-
+    @Override
+    public void onSaveInstanceState(Bundle savedState) {
+        super.onSaveInstanceState(savedState);
+        savedState.putSerializable("myKey", (Serializable) books);
     }
 
     public boolean isNetworkConnected() {

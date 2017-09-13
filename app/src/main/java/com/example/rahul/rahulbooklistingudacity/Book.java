@@ -8,7 +8,7 @@ import android.os.Parcelable;
  */
 
 
-public class Book {
+public class Book implements Parcelable {
 
     private String mAuthors;
     private String mTitle;
@@ -26,4 +26,31 @@ public class Book {
         return mTitle;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.mAuthors);
+        dest.writeString(this.mTitle);
+    }
+
+    protected Book(Parcel in) {
+        this.mAuthors = in.readString();
+        this.mTitle = in.readString();
+    }
+
+    public static final Parcelable.Creator<Book> CREATOR = new Parcelable.Creator<Book>() {
+        @Override
+        public Book createFromParcel(Parcel source) {
+            return new Book(source);
+        }
+
+        @Override
+        public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
 }
