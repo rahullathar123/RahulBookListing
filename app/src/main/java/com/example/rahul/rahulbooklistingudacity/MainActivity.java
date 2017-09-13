@@ -1,13 +1,10 @@
 package com.example.rahul.rahulbooklistingudacity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,7 +14,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,10 +22,9 @@ import butterknife.ButterKnife;
 
 
 public class MainActivity extends AppCompatActivity {
-       static final String BOOK_LIST_VALUES = "bookListValues";
-
+    static final String BOOK_LIST_VALUES = "bookListValues";
+    static final String SEARCH_RESULTS = "booksSearchResults";
     Button findButton;
-
     @BindView(R.id.progress)
     ProgressBar loader;
     @BindView(R.id.search)
@@ -37,9 +32,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.no_book_found)
     TextView notFound;
     BookAdapter adapter;
-    static final String SEARCH_RESULTS = "booksSearchResults";
     ListView bookList;
-    List<Book> books;
+    ArrayList<Book> book;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +42,9 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         findButton = (Button) findViewById(R.id.seach_button);
         bookList = (ListView) findViewById(R.id.list);
-        books = new ArrayList<>();
-        adapter = new BookAdapter(this);
+        book = new ArrayList<>();
         adapter = new BookAdapter(this);
         bookList.setAdapter(adapter);
-
-
-
 
         findButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             // restore saved values
-            books = (List<Book>) savedInstanceState.getSerializable("myKey");
+            book = savedInstanceState.getParcelableArrayList("myKey");
             adapter.clear();
-            adapter.addAll(books);
+            adapter.addAll(book);
             adapter.notifyDataSetChanged();
         }
     }
@@ -96,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle savedState) {
         super.onSaveInstanceState(savedState);
-        savedState.putSerializable("myKey", (Serializable) books);
+        //added by Kunal
+        savedState.putParcelableArrayList("myKey", book);
     }
 
     public boolean isNetworkConnected() {
@@ -138,15 +129,15 @@ public class MainActivity extends AppCompatActivity {
             //hide the progress bar
 
             if (books == null) {
+
                 notFound.setVisibility(View.VISIBLE);
                 notFound.setText("Didnt find any book");
             } else {
+                book = (ArrayList<Book>) books;
                 notFound.setVisibility(View.GONE);
                 adapter.addAll(books);
             }
         }
 
     }
-
 }
-

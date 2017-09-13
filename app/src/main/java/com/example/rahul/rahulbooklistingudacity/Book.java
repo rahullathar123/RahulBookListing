@@ -10,12 +10,28 @@ import android.os.Parcelable;
 
 public class Book implements Parcelable {
 
+    public static final Parcelable.Creator<Book> CREATOR = new Parcelable.Creator<Book>() {
+        @Override
+        public Book createFromParcel(Parcel source) {
+            return new Book(source);
+        }
+
+        @Override
+        public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
     private String mAuthors;
     private String mTitle;
 
     public Book(String authors_name, String bookName) {
         mAuthors = authors_name;
         mTitle = bookName;
+    }
+
+    protected Book(Parcel in) {
+        this.mAuthors = in.readString();
+        this.mTitle = in.readString();
     }
 
     public String getAuthors() {
@@ -36,21 +52,4 @@ public class Book implements Parcelable {
         dest.writeString(this.mAuthors);
         dest.writeString(this.mTitle);
     }
-
-    protected Book(Parcel in) {
-        this.mAuthors = in.readString();
-        this.mTitle = in.readString();
-    }
-
-    public static final Parcelable.Creator<Book> CREATOR = new Parcelable.Creator<Book>() {
-        @Override
-        public Book createFromParcel(Parcel source) {
-            return new Book(source);
-        }
-
-        @Override
-        public Book[] newArray(int size) {
-            return new Book[size];
-        }
-    };
 }
